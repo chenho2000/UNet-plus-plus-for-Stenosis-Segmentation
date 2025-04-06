@@ -3,24 +3,30 @@ import os
 import numpy as np
 import torch
 from skimage import io
+from skimage.color import rgb2gray
 from torch.utils.data import Dataset
 from ultralytics.data.utils import polygon2mask
-from skimage.color import rgb2gray
+
 
 def read_seg(label, imgsz=(512, 512)):
-    masks = []
+    masks = np.zeros(imgsz, dtype=float)
     with open(label, "r") as f:
         for line in f:
             cont = line.split()
             ncls, seg = cont[0], cont[1:]
             seg = np.array(seg).astype(float).reshape((-1, 2))
-            masks.append(polygon2mask(
+
+            curr = polygon2mask(
                 imgsz,
                 [seg * imgsz],
-                color=255,
+                color=1,
                 downsample_ratio=1,
-            ))
-    return masks
+            )
+
+            # combine masks
+            masks = 1 * ((masks == 1) | (curr == 1))
+
+    return masks.astype(float)
 
 
 class ARCADE(Dataset):
@@ -49,7 +55,15 @@ class ARCADE(Dataset):
             idx = idx.tolist()
 
         img_name = os.path.join(self.root_dir, "images", str(idx + 1) + ".png")
-        image = 1 - rgb2gray(io.imread(img_name))
+
+        image = io.imread(img_name)
+
+        # Convert to grayscale if the image is not already
+        if image.ndim == 2:
+            image = 1 - (image / 255)
+        else:
+            image = 1 - rgb2gray(io.imread(img_name))
+
         mask = self.mask[idx + 1]
         sample = {'image': image, 'mask': mask}
 
