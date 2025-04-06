@@ -65,9 +65,9 @@ class ARCADE(Dataset):
             image = rgb2gray(io.imread(img_name))
 
         mask = self.mask[idx + 1]
-        sample = {'image': image, 'mask': mask}
 
-        if self.transform:
-            sample = self.transform(sample)
+        if self.transform is not None:
+            image = self.transform(image)
+            mask = self.transform(mask)
 
-        return sample
+        return image.reshape(1, 512, 512), mask.reshape(1, 512, 512)
