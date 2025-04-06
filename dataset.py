@@ -60,9 +60,9 @@ class ARCADE(Dataset):
 
         # Convert to grayscale if the image is not already
         if image.ndim == 2:
-            image = 1 - (image / 255)
+            image = image / 255
         else:
-            image = 1 - rgb2gray(io.imread(img_name))
+            image = rgb2gray(io.imread(img_name))
 
         mask = self.mask[idx + 1]
         sample = {'image': image, 'mask': mask}
