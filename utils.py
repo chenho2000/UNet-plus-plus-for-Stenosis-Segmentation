@@ -5,15 +5,6 @@ from torch.utils.data import DataLoader
 
 from dataset import ARCADE
 
-
-def save_checkpoint(state, filename="best.pth.tar"):
-    torch.save(state, filename)
-
-
-def load_checkpoint(checkpoint, model):
-    model.load_state_dict(checkpoint["state_dict"])
-
-
 def plot_image_with_mask(image, mask):
     """
     Plots an image with its corresponding mask.
@@ -38,8 +29,8 @@ def accuracy(data_loader, model, device):
             correct += (preds == y).sum()
             total += torch.numel(preds)
             dice_score += (2 * (preds * y).sum()) / ((preds + y).sum() + 1e-8)
-    print(f"Accuracy: {correct / total}")
-    print(f"Dice score: {dice_score / len(data_loader)}")
+    # print(f"Accuracy: {correct / total}")
+    # print(f"Dice score: {dice_score / len(data_loader)}")
     model.train()
 
     return correct / total, dice_score / len(data_loader)

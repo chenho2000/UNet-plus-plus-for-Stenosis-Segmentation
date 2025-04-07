@@ -51,8 +51,6 @@ class ARCADE(Dataset):
         return len(self.mask.keys())
 
     def __getitem__(self, idx):
-        if torch.is_tensor(idx):
-            idx = idx.tolist()
 
         img_name = os.path.join(self.root_dir, "images", str(idx + 1) + ".png")
 
@@ -64,7 +62,10 @@ class ARCADE(Dataset):
         else:
             image = rgb2gray(io.imread(img_name))
 
-        mask = self.mask[idx + 1]
+        if idx + 1 in self.mask.keys():
+            mask = self.mask[idx + 1]
+        else:
+            mask = np.zeros((512, 512))
 
         if self.transform is not None:
             image = self.transform(image)
