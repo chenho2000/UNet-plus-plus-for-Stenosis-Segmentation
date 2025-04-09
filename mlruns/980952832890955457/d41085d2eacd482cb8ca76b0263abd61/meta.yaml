@@ -1,5 +1,5 @@
 artifact_uri: file:///c:/Users/student01/Desktop/project_Kamurocho/mlruns/980952832890955457/d41085d2eacd482cb8ca76b0263abd61/artifacts
-end_time: null
+end_time: 1744003880612
 entry_point_name: ''
 experiment_id: '980952832890955457'
 lifecycle_stage: active
@@ -10,6 +10,6 @@ source_name: ''
 source_type: 4
 source_version: ''
 start_time: 1743985059029
-status: 1
+status: 3
 tags: []
 user_id: student01
