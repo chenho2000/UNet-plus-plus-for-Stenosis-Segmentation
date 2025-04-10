@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
+from sklearn.metrics import f1_score
+from sklearn.metrics import jaccard_score
 from torch.utils.data import DataLoader
 
 from dataset import ARCADE
@@ -36,8 +38,8 @@ def iou_score(output, target):
 
 
 def dice(output, target):
-    output = output.view(-1)
-    target = target.view(-1)
+    output = output.flatten()
+    target = target.flatten()
     intersection = (output * target).sum()
 
     return (2. * intersection + 1e-7) / (output.sum() + target.sum() + 1e-7)
@@ -52,10 +54,10 @@ def track_metric(data_loader, model, device):
     with torch.no_grad():
         for x, y in data_loader:
             x = x.to(device)
-            y = y.to(device).unsqueeze(1)
-            pred = (torch.sigmoid(model(x)) > 0.5).float()
-            f1 = calculate_f1_score(pred.cpu().numpy(), y.cpu().numpy())
-            iou = iou_score(pred.cpu().numpy().astype(int), y.cpu().numpy().astype(int))
+            y = y.numpy().reshape((512, 512)).astype(int)
+            pred = (torch.sigmoid(model(x)) > 0.5).cpu().numpy().reshape((512, 512)).astype(int)
+            f1 = f1_score(pred, y, average='micro')
+            iou = jaccard_score(pred, y, average='micro')
             dsc = dice(pred, y)
             total_f1 += f1
             total_iou += iou
