@@ -49,7 +49,7 @@ class ARCADE(Dataset):
                 self.mask[int(i[:-4])] = read_seg(os.path.join(label_path, i))
 
     def __len__(self):
-        return len(self.mask.keys())
+        return len(os.listdir(os.path.join(self.root_dir, "images")))
 
     def __getitem__(self, idx):
 
