@@ -18,24 +18,6 @@ def plot_image_with_mask(image, mask):
     plt.show()
 
 
-def calculate_f1_score(output, target):
-    tp = np.sum((target == 1) & (output == 1))
-    fp = np.sum((target == 0) & (output == 1))
-    fn = np.sum((target == 1) & (output == 0))
-
-    precision = tp / (tp + fp + 1e-7)
-    recall = tp / (tp + fn + 1e-7)
-
-    f1_score = 2 * (precision * recall + 1e-7) / (precision + recall + 1e-7)
-
-    return f1_score
-
-
-def iou_score(output, target):
-    intersection = (output & target).sum()
-    union = (output | target).sum()
-    return intersection / (union + 1e-7)
-
 
 def dice(output, target):
     output = output.flatten()
@@ -54,11 +36,17 @@ def track_metric(data_loader, model, device):
     with torch.no_grad():
         for x, y in data_loader:
             x = x.to(device)
-            y = y.numpy().reshape((512, 512)).astype(int)
-            pred = (torch.sigmoid(model(x)) > 0.5).cpu().numpy().reshape((512, 512)).astype(int)
-            f1 = f1_score(pred, y, average='micro')
-            iou = jaccard_score(pred, y, average='micro')
-            dsc = dice(pred, y)
+            y = y.to(device).long()
+
+            pred = (torch.sigmoid(model(x)) > 0.5).long()
+
+            pred_flat = pred.view(-1).cpu().numpy()
+            y_flat = y.view(-1).cpu().numpy()
+
+            f1 = f1_score(pred_flat, y_flat, average='binary')
+            iou = jaccard_score(pred_flat, y_flat, average='binary')
+            dsc = dice(pred_flat, y_flat)
+
             total_f1 += f1
             total_iou += iou
             total_dsc += dsc
