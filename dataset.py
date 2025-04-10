@@ -62,8 +62,8 @@ class ARCADE(Dataset):
         else:
             image = rgb2gray(io.imread(img_name))
 
-        if self.train:
-            image = HomomorphicFilter().filter(image, (12, 2))
+        # if self.train:
+        #     image = HomomorphicFilter().filter(image, (12, 2))
         if idx + 1 in self.mask.keys():
             mask = self.mask[idx + 1]
         else:

@@ -1,0 +1,16 @@
+artifact_uri: file:///c:/Users/student01/Desktop/project_Kamurocho/mlruns/720046021139205273/7797080a18454bd782d39db0edb213fb/artifacts
+deleted_time: 1744316850973
+end_time: null
+entry_point_name: ''
+experiment_id: '720046021139205273'
+lifecycle_stage: deleted
+run_id: 7797080a18454bd782d39db0edb213fb
+run_name: nebulous-fawn-410
+run_uuid: 7797080a18454bd782d39db0edb213fb
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1744316491805
+status: 1
+tags: []
+user_id: student01
