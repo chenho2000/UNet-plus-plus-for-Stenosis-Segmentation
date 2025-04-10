@@ -6,7 +6,7 @@ from skimage import io
 from skimage.color import rgb2gray
 from torch.utils.data import Dataset
 from ultralytics.data.utils import polygon2mask
-
+from homofilt import HomomorphicFilter
 
 def read_seg(label, imgsz=(512, 512)):
     masks = np.zeros(imgsz, dtype=float)
@@ -32,7 +32,7 @@ def read_seg(label, imgsz=(512, 512)):
 class ARCADE(Dataset):
     """ARCADE dataset."""
 
-    def __init__(self, root_dir, transform=None):
+    def __init__(self, root_dir, transform=None, train=False):
         """
         Arguments:
             root_dir (string): Directory with all the images/labels.
@@ -42,6 +42,7 @@ class ARCADE(Dataset):
         self.mask = dict()
         self.root_dir = root_dir
         self.transform = transform
+        self.train = train
         label_path = os.path.join(root_dir, "labels")
         for i in os.listdir(os.path.join(root_dir, "labels")):
             if i.endswith(".txt"):
@@ -55,20 +56,22 @@ class ARCADE(Dataset):
         img_name = os.path.join(self.root_dir, "images", str(idx + 1) + ".png")
 
         image = io.imread(img_name)
-
         # Convert to grayscale if the image is not already
         if image.ndim == 2:
             image = image / 255
         else:
             image = rgb2gray(io.imread(img_name))
 
+        if self.train:
+            image = HomomorphicFilter().filter(image, (12, 2))
         if idx + 1 in self.mask.keys():
             mask = self.mask[idx + 1]
         else:
             mask = np.zeros((512, 512))
 
         if self.transform is not None:
-            image = self.transform(image)
-            mask = self.transform(mask)
+            augmentations = self.transform(image=image, mask=mask)
+            image = torch.Tensor.float(augmentations["image"])
+            mask = torch.Tensor.float(augmentations["mask"])
 
         return image.reshape(1, 512, 512), mask.reshape(1, 512, 512)
