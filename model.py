@@ -2,6 +2,58 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+def conv3x3(in_planes: int, out_planes: int, stride: int = 1, groups: int = 1, dilation: int = 1) -> nn.Conv2d:
+    """3x3 convolution with padding"""
+    return nn.Conv2d(
+        in_planes,
+        out_planes,
+        kernel_size=3,
+        stride=stride,
+        padding=dilation,
+        groups=groups,
+        bias=True,
+        dilation=dilation,
+    )
+
+
+def conv1x1(in_planes: int, out_planes: int, stride: int = 1) -> nn.Conv2d:
+    """1x1 convolution"""
+    return nn.Conv2d(in_planes, out_planes, kernel_size=1, stride=stride, bias=True)
+
+
+# One resnet block (with identity)
+# bn -> con -> relu
+class ResBlock(nn.Module):
+    def __init__(self, in_planes, out_planes, dropout_rate=0.3, identity=True, stride=1):
+        super(ResBlock, self).__init__()
+        self.bn1 = nn.BatchNorm2d(in_planes)
+        self.conv1 = conv3x3(in_planes, out_planes)
+        self.relu1 = nn.ReLU()
+        self.dropout = nn.Dropout(p=dropout_rate)
+        self.bn2 = nn.BatchNorm2d(out_planes)
+        self.relu2 = nn.ReLU()
+        self.conv2 = conv3x3(out_planes, out_planes, stride=stride)
+
+        # "identity" convolution
+        self.identity = nn.Sequential()
+        if identity:
+            self.identity = nn.Sequential(
+                conv1x1(in_planes, out_planes, stride=stride),
+            )
+
+    def forward(self, x):
+        x_org = x
+        x = self.bn1(x)
+        x = self.relu1(x)
+        x = self.conv1(x)
+        x = self.dropout(x)
+        x = self.bn2(x)
+        x = self.relu2(x)
+        x = self.conv2(x)
+        x += self.identity(x_org)
+
+        return x
+    
 class ResNeXtBottleneck(nn.Module):
     """
     RexNeXt bottleneck type C (https://github.com/facebookresearch/ResNeXt/blob/master/models/resnext.lua)
