@@ -1,0 +1,15 @@
+artifact_uri: file:///mnt/hpc/work/m43huang/project_Kamurocho/mlruns/871876472132613964/9b8a50abcdab42508b8d95700055fac7/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '871876472132613964'
+lifecycle_stage: active
+run_id: 9b8a50abcdab42508b8d95700055fac7
+run_name: wise-auk-782
+run_uuid: 9b8a50abcdab42508b8d95700055fac7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1744337490057
+status: 1
+tags: []
+user_id: m43huang
