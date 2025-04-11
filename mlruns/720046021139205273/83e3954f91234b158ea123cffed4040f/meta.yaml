@@ -4,7 +4,7 @@ entry_point_name: ''
 experiment_id: '720046021139205273'
 lifecycle_stage: active
 run_id: 83e3954f91234b158ea123cffed4040f
-run_name: fearless-midge-467
+run_name: resnext_rotate
 run_uuid: 83e3954f91234b158ea123cffed4040f
 source_name: ''
 source_type: 4

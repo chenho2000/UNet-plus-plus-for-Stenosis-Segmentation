@@ -1,0 +1,15 @@
+artifact_uri: file:///kaggle/working/mlruns/720046021139205273/c1ff6d80771c4d8e914f3784c6a51ae9/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '720046021139205273'
+lifecycle_stage: active
+run_id: c1ff6d80771c4d8e914f3784c6a51ae9
+run_name: resnet_no_rotate
+run_uuid: c1ff6d80771c4d8e914f3784c6a51ae9
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1744342912843
+status: 3
+tags: []
+user_id: root

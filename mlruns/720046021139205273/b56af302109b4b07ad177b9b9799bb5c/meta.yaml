@@ -4,7 +4,7 @@ entry_point_name: ''
 experiment_id: '720046021139205273'
 lifecycle_stage: active
 run_id: b56af302109b4b07ad177b9b9799bb5c
-run_name: inquisitive-cat-238
+run_name: vgg_homo
 run_uuid: b56af302109b4b07ad177b9b9799bb5c
 source_name: ''
 source_type: 4

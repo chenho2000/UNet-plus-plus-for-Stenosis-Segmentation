@@ -4,7 +4,7 @@ entry_point_name: ''
 experiment_id: '720046021139205273'
 lifecycle_stage: active
 run_id: e33472c2aeb54237868e531df781f25e
-run_name: sedate-owl-179
+run_name: vgg_no_rotate
 run_uuid: e33472c2aeb54237868e531df781f25e
 source_name: ''
 source_type: 4
