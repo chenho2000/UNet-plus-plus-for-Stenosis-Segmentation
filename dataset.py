@@ -8,7 +8,11 @@ from torch.utils.data import Dataset
 from ultralytics.data.utils import polygon2mask
 from homofilt import HomomorphicFilter
 
+
 def read_seg(label, imgsz=(512, 512)):
+    """
+    Read segmentation mask from yolo annotation file.
+    """
     masks = np.zeros(imgsz, dtype=float)
     with open(label, "r") as f:
         for line in f:
@@ -62,8 +66,6 @@ class ARCADE(Dataset):
         else:
             image = rgb2gray(io.imread(img_name))
 
-        # if self.train:
-        #     image = HomomorphicFilter().filter(image, (12, 2))
         if idx + 1 in self.mask.keys():
             mask = self.mask[idx + 1]
         else:
